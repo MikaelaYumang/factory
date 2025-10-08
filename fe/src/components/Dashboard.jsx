@@ -5,6 +5,7 @@ import AddMachineForm from './AddMachineForm';
 import Leaderboard from './Leaderboard';
 import WorkerRecognition from './WorkerRecognition';
 import EditMachineDialog from './EditMachineDialog';
+import About from './About';
 import { calculateEfficiency } from '../utils/calculations';
 
 export default function Dashboard({ machines, onLogout, onAddMachine, onUpdateMachine, onDeleteMachine }) {
@@ -36,7 +37,11 @@ export default function Dashboard({ machines, onLogout, onAddMachine, onUpdateMa
     <div className="min-h-screen bg-slate-50">
       <DashboardHeader onLogout={onLogout} />
 
+
       <div className="max-w-7xl mx-auto p-6">
+
+              <About/>
+
         <div className="mb-6 flex items-center justify-between">
           <button 
             onClick={() => setShowAddForm(!showAddForm)} 

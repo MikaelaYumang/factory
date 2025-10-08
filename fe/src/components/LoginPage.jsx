@@ -35,17 +35,17 @@ export default function LoginPage({ onLogin }) {
     }, 800);
   };
 
-  // ✅ Generate gears only once and keep their random properties fixed
+  // Generate gears with staggered start times
   const gears = useMemo(
     () =>
-      Array.from({ length: 8 }).map((_, i) => ({
+      Array.from({ length: 12 }).map((_, i) => ({
         id: i,
-        size: 50 + Math.random() * 90,
+        size: 60 + Math.random() * 100,
         left: Math.random() * 100,
-        bottom: -(Math.random() * 20 + 20),
-        duration: 12 + Math.random() * 8, // ✅ fixed duration
-        delay: Math.random() * 10,
-        color: ["text-indigo-400", "text-blue-400", "text-cyan-400", "text-slate-400"][
+        bottom: -(Math.random() * 30 + 30),
+        duration: 10 + Math.random() * 6,
+        delay: i * 0.8, // Staggered start - gears appear one after another
+        color: ["text-blue-400", "text-green-400", "text-cyan-400", "text-indigo-400"][
           Math.floor(Math.random() * 4)
         ],
       })),
@@ -53,19 +53,19 @@ export default function LoginPage({ onLogin }) {
   );
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-blue-50 via-indigo-50 to-cyan-100 p-4">
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-green-50 p-4">
       {/* Floating Upward Gears */}
       <div className="absolute inset-0 overflow-hidden">
         {gears.map((gear) => (
           <Cog
             key={gear.id}
-            className={`absolute opacity-30 ${gear.color} gear`}
+            className={`absolute ${gear.color} gear`}
             style={{
               width: `${gear.size}px`,
               height: `${gear.size}px`,
               left: `${gear.left}%`,
-              bottom: `${gear.bottom}px`,
-              animationDuration: `${gear.duration}s`, // ✅ fixed duration
+              bottom: `-${gear.size + 50}px`, // Start completely below viewport
+              animationDuration: `${gear.duration}s`,
               animationDelay: `${gear.delay}s`,
             }}
           />
@@ -73,20 +73,20 @@ export default function LoginPage({ onLogin }) {
       </div>
 
       {/* Static Login Form */}
-      <Card className="w-full max-w-md shadow-2xl border border-white/50 bg-white/80 backdrop-blur-2xl z-10 rounded-2xl">
-        <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white text-center rounded-t-2xl pb-6">
-          <div className="flex justify-center mb-3">
-            <div className="p-4 bg-white/20 rounded-2xl border border-white/30">
-              <Factory className="w-12 h-12 text-white animate-pulse" />
+      <Card className="w-full max-w-md shadow-2xl border-0 bg-transparent z-10 rounded-2xl overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-blue-600 to-green-600 text-white text-center pb-8 pt-8 rounded-t-2xl">
+          <div className="flex justify-center mb-4">
+            <div className="p-3 bg-blue-700 rounded-xl">
+              <Factory className="w-10 h-10 text-white" />
             </div>
           </div>
-          <CardTitle className="text-3xl font-bold">FACTORY CONTROL</CardTitle>
-          <p className="text-blue-100 text-sm mt-1">
-            Efficiency Monitoring System • SDG 9
+          <CardTitle className="text-3xl font-black tracking-tight">FACTORY CONTROL</CardTitle>
+          <p className="text-white/90 text-sm mt-2 font-medium">
+            Efficiency Monitoring System
           </p>
         </CardHeader>
 
-        <CardContent className="p-8 space-y-6">
+        <CardContent className="p-8 space-y-6 bg-white/95 backdrop-blur-xl rounded-b-2xl">
           <div>
             <Label htmlFor="email" className="text-sm font-semibold text-slate-700">
               Administrator Email
@@ -121,7 +121,7 @@ export default function LoginPage({ onLogin }) {
           <Button
             onClick={handleLogin}
             disabled={isLoading}
-            className="w-full h-12 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-bold text-base shadow-lg disabled:opacity-60"
+            className="w-full h-12 bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-bold text-base shadow-lg disabled:opacity-60"
           >
             {isLoading ? (
               <div className="flex items-center gap-2">
@@ -135,24 +135,31 @@ export default function LoginPage({ onLogin }) {
         </CardContent>
       </Card>
 
-      {/* Floating & Spinning Animation */}
+      {/* Enhanced Floating & Spinning Animation */}
       <style jsx>{`
         @keyframes floatUp {
           0% {
             transform: translateY(0) rotate(0deg);
-            opacity: 0.4;
+            opacity: 0;
           }
-          50% {
+          10% {
+            opacity: 0.6;
+          }
+          15% {
             opacity: 0.8;
           }
+          90% {
+            opacity: 0.5;
+          }
           100% {
-            transform: translateY(-110vh) rotate(360deg);
+            transform: translateY(-110vh) rotate(720deg);
             opacity: 0;
           }
         }
 
         .gear {
           animation: floatUp linear infinite;
+          filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
         }
       `}</style>
     </div>
